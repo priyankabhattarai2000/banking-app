@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Banking App</title>
+</head>
+<body>
+
+<h1>🏦 Banking App</h1>
+
+<h3>Create Account</h3>
+<input id="name" placeholder="Enter name">
+<button onclick="createAccount()">Create</button>
+
+<h3>Deposit</h3>
+<input id="id1" placeholder="Account ID">
+<input id="amount1" placeholder="Amount">
+<button onclick="deposit()">Deposit</button>
+
+<h3>Withdraw</h3>
+<input id="id2" placeholder="Account ID">
+<input id="amount2" placeholder="Amount">
+<button onclick="withdraw()">Withdraw</button>
+
+<h3>Check Balance</h3>
+<input id="id3" placeholder="Account ID">
+<button onclick="checkBalance()">Check</button>
+
+<p id="output"></p>
+
+<script>
+const url = "http://localhost:3000";
+
+// Create Account
+function createAccount() {
+    fetch(url + "/account", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            name: document.getElementById("name").value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("output").innerText =
+        "Account Created! ID: " + data.id;
+    });
+}
+
+// Deposit
+function deposit() {
+    fetch(url + "/deposit", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            id: Number(document.getElementById("id1").value),
+            amount: Number(document.getElementById("amount1").value)
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("output").innerText =
+        "Deposit Done. Balance: " + data.balance;
+    });
+}
+
+// Withdraw
+function withdraw() {
+    fetch(url + "/withdraw", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            id: Number(document.getElementById("id2").value),
+            amount: Number(document.getElementById("amount2").value)
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("output").innerText =
+        "Withdraw Done. Balance: " + data.balance;
+    });
+}
+
+// Check Balance
+function checkBalance() {
+    let id = document.getElementById("id3").value;
+
+    fetch(url + "/balance/" + id)
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("output").innerText =
+        "Balance: " + data.balance;
+    });
+}
+</script>
+
+</body>
+</html>
